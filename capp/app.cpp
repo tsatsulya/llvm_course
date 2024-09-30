@@ -1,14 +1,14 @@
-#define x_size 4
-#define y_size 5
+#include "paint.h"
+
+#define x_size window_size_x
+#define y_size window_size_y
 
 
 char is_border(int location) {
-    if (location % y_size == 0 || location % y_size == y_size - 1) {
+    if (location % y_size == 0 || location % y_size == y_size - 1)
         return 1;
-    }
-    if (location / y_size == 0 || location / y_size == x_size - 1) {
+    if (location / y_size == 0 || location / y_size == x_size - 1)
         return 1;
-    }
     return 0;
 }
 
@@ -22,6 +22,7 @@ int get_neighbours_amount(int location, char *alive_map, int y_left,
             }
         }
     }
+
     return neighbours_amount;
 }
 
@@ -45,6 +46,10 @@ char update_nonborder_cell(int location, char *alive_map) {
 void set_range(int location, int *y_left, int *y_right, int *x_left, int *x_right) {
     int x_loc = location / y_size;
     int y_loc = location % y_size;
+    *y_left = y_loc - 1;
+    *y_right = y_loc + 1;
+    *x_left = x_loc - 1;
+    *x_right = x_loc + 1;
 
     if (y_loc == 0) *y_left = 0;
     if (y_loc == y_size - 1) *y_right = y_loc;
@@ -53,7 +58,9 @@ void set_range(int location, int *y_left, int *y_right, int *x_left, int *x_righ
 }
 
 char update_border_cell(int location, char *alive_map) {
+
     int is_alive = alive_map[location];
+
     int y_left, y_right, x_left, x_right;
     set_range(location, &y_left, &y_right, &x_left, &x_right);
     int neighbours_amount = get_neighbours_amount(location, alive_map, y_left, y_right, x_left, x_right);
@@ -74,20 +81,27 @@ void update_map(char *alive_map) {
             alive_map[loc] = update_nonborder_cell(loc, tmp_map);
         else
             alive_map[loc] = update_border_cell(loc, tmp_map);
+
+        if (alive_map[loc])
+            set_pixel(loc / y_size, loc % y_size, 255, 0, 0);
+        else
+            set_pixel(loc / y_size, loc % y_size, 0, 0, 0);
     }
 }
 
-
 void app() {
-    char tmp_map[x_size * y_size];
-    char alive_map[x_size * y_size] = {
-        0, 0, 0, 0, 0,
-        0, 1, 0, 0, 0,
-        0, 0, 1, 1, 0,
-        0, 1, 1, 0, 0,
-    };
+    create_window();
 
-    for (int step = 0; step < 1000; step++) {
+    char alive_map[x_size * y_size];
+    generate_char_field(alive_map);
+
+    for (int step = 0; step < 100000; step++) {
         update_map(alive_map);
+        update_window();
     }
+}
+
+int main() {
+    app();
+    return 0;
 }
