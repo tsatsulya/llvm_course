@@ -1,67 +1,3 @@
-// #include "sim.h"
-
-// void initMatrix(unsigned int matrix[x_size][y_size])
-// {
-// 	for (int y = 0; y < y_size; ++y)
-// 	{
-// 		for (int x = 0; x < x_size; ++x)
-// 		{
-// 			if (x < 10 || y < 10)
-// 			{
-// 				matrix[x][y] = 0xFF00FF00;
-// 			}
-//             else if (x > x_size / 4 * 1 && x < x_size / 4 * 1 + 10) {
-//                 matrix[x][y] = 0xFFFF0000;
-//             }
-//             else if (x > x_size / 4 * 2 && x < x_size / 4 * 2 + 10) {
-//                 matrix[x][y] = 0xFF0000FF;
-//             }
-//             else if (x > x_size / 4 * 3 && x < x_size / 4 * 3 + 10) {
-//                 matrix[x][y] = 0xFFFFFFFF;
-//             }
-// 			else
-// 			{
-// 				matrix[x][y] = 0xFF000000;
-// 			}
-// 		}
-// 	}
-// }
-
-// void updateMatrix(unsigned int matrix[x_size][y_size])
-// {
-// 	for (int y = 0; y < y_size - 1; ++y)
-// 	{
-// 		for (int x = x_size - 1; x > 0; --x)
-// 		{
-// 			matrix[x][y] = matrix[x - 1][y] / 4 + matrix[x][y] / 4 + matrix[x][y + 1] / 4 + matrix[x - 1][y + 1] / 4;
-// 		}
-// 	}
-// }
-
-// void drawMatrix(unsigned int matrix[x_size][y_size])
-// {
-// 	for (int y = 0; y < y_size; ++y)
-// 		for (int x = 0; x < x_size; ++x)
-// 		{
-// 			simPutPixel(x, y, matrix[x][y]);
-// 		}
-
-// 	simFlush();
-// }
-
-// void app()
-// {
-// 	unsigned int matrix[x_size][y_size];
-// 	initMatrix(matrix);
-
-// 	for (int step = 0; step < 1000; ++step)
-// 	{
-// 		drawMatrix(matrix);
-// 		updateMatrix(matrix);
-// 	}
-// }
-
-
 #include "sim.h"
 
 #define x_size 400
@@ -171,7 +107,6 @@ void app() {
     }
 
     window_exit();
-
 }
 
 
