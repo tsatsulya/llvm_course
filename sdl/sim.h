@@ -1,12 +1,9 @@
-#define x_size 400
-#define y_size 500
+#define SIM_X_SIZE 2000
+#define SIM_Y_SIZE 1000
 
-#ifndef __sim__
-void flush();
-void set_pixel(int x, int y, int r, int g, int b);
-int custom_rand();
-#endif
+void simFlush();
+void simPutDisplayPixel(int x, int y, int argb, int scale);
 
-extern void init();
+extern void simInit();
 extern void app();
-extern void window_exit();
+extern void simExit();

@@ -1,7 +1,7 @@
 #include "sim.h"
 
-#define x_size 400
-#define y_size 500
+#define x_size 40
+#define y_size 25
 
 
 char is_border(int location) {
@@ -81,32 +81,23 @@ void update_map(char *alive_map) {
             alive_map[loc] = update_nonborder_cell(loc, tmp_map);
         else
             alive_map[loc] = update_border_cell(loc, tmp_map);
-
-        if (alive_map[loc])
-            set_pixel(loc / y_size, loc % y_size, 255, 0, 0);
-        else
-            set_pixel(loc / y_size, loc % y_size, 0, 0, 0);
-    }
-    flush();
-}
-
-void generate_char_field(char *field) {
-    for (int i = 0; i < x_size * y_size; i++) {
-        field[i] = custom_rand();
     }
 }
 
 void app() {
-    init();
-
     char alive_map[x_size * y_size];
-    generate_char_field(alive_map);
-
-    for (int step = 0; step < 100000; step++) {
+    alive_map[14] = 1;
+    for (int step = 0; step < 100; step++) {
+        for (int loc = 0; loc < y_size * x_size; loc++) {
+            if (!alive_map[loc]) {
+                simPutDisplayPixel(loc / y_size, loc % y_size, 0xFFFFFFFF, 40);
+            }
+            else
+                simPutDisplayPixel(loc / y_size, loc % y_size, 0xff9999, 40);
+        }
+        simFlush();
         update_map(alive_map);
     }
-
-    window_exit();
 }
 
 

@@ -1,7 +1,8 @@
 #include "sim.h"
 
-int main(void)
-{
+int main() {
+    simInit();
     app();
+    simExit();
     return 0;
 }
