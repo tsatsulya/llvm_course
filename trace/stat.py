@@ -84,8 +84,16 @@ for i in range(len(x)):
 plt.grid(None, "both", "y")
 plt.title("Repeated patterns")
 plt.xticks(rotation=45, fontsize=15)
-plt.savefig(current_dir_path + '/statistics/repeated_patterns.pdf')
+plt.savefig(current_dir_path + '/statistics/repeated_patterns.png')
 
+legend = ''
+for i in range(len(patterns)):
+    legend += f'\n{i}*\n\t'
+    legend += '\n\t'.join(patterns[i][0])
+    legend += '\n\n'
+
+with open(current_dir_path + '/statistics/patterns_legend.txt', 'w') as f:
+    f.write(legend)
 
 fig = plt.figure(figsize=(16, 10))
 
@@ -100,4 +108,4 @@ plt.grid(None, "both", "y")
 plt.title("Opcodes statistics")
 plt.xticks(rotation=90, fontsize=12)
 plt.tight_layout()
-plt.savefig(current_dir_path + '/statistics/opcodes_statistics.pdf')
+plt.savefig(current_dir_path + '/statistics/opcodes_statistics.png')
