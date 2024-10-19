@@ -4,7 +4,7 @@
 #define y_size 25
 
 
-char is_border(int location) {
+static inline char is_border(int location) {
     if (location % y_size == 0 || location % y_size == y_size - 1)
         return 1;
     if (location / y_size == 0 || location / y_size == x_size - 1)
@@ -12,7 +12,7 @@ char is_border(int location) {
     return 0;
 }
 
-int get_neighbours_amount(int location, char *alive_map, int y_left,
+static inline int get_neighbours_amount(int location, char *alive_map, int y_left,
                           int y_right, int x_left, int x_right) {
     int neighbours_amount = 0;
     for (int x = x_left; x <= x_right; ++x) {
@@ -26,14 +26,14 @@ int get_neighbours_amount(int location, char *alive_map, int y_left,
     return neighbours_amount;
 }
 
-char check_rule(int neighbours_amount, char is_alive) {
+static inline char check_rule(int neighbours_amount, char is_alive) {
     if (is_alive && neighbours_amount < 2) return 0;
     if (is_alive && neighbours_amount > 3) return 0;
     if (!is_alive && neighbours_amount == 3) return 1;
     return is_alive;
 }
 
-char update_nonborder_cell(int location, char *alive_map) {
+static inline char update_nonborder_cell(int location, char *alive_map) {
     int x_loc = location / y_size;
     int y_loc = location % y_size;
 
@@ -43,7 +43,7 @@ char update_nonborder_cell(int location, char *alive_map) {
     return check_rule(neighbours_amount, is_alive);
 }
 
-void set_range(int location, int *y_left, int *y_right, int *x_left, int *x_right) {
+static inline void set_range(int location, int *y_left, int *y_right, int *x_left, int *x_right) {
     int x_loc = location / y_size;
     int y_loc = location % y_size;
     *y_left = y_loc - 1;
@@ -57,7 +57,7 @@ void set_range(int location, int *y_left, int *y_right, int *x_left, int *x_righ
     if (x_loc == x_size - 1) *x_right = x_loc;
 }
 
-char update_border_cell(int location, char *alive_map) {
+static inline char update_border_cell(int location, char *alive_map) {
 
     int is_alive = alive_map[location];
 
@@ -67,13 +67,13 @@ char update_border_cell(int location, char *alive_map) {
     return check_rule(neighbours_amount, is_alive);
 }
 
-void copy_map(char *empty, char *full) {
+static inline void copy_map(char *empty, char *full) {
     for (int loc = 0; loc < x_size * y_size; ++loc) {
         empty[loc] = full[loc];
     }
 }
 
-void update_map(char *alive_map) {
+static inline void update_map(char *alive_map) {
     char tmp_map[x_size * y_size];
     copy_map(tmp_map, alive_map);
     for (int loc = 0; loc < x_size * y_size; ++loc) {
