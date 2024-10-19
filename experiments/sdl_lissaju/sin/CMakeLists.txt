@@ -1,19 +1,17 @@
 cmake_minimum_required(VERSION 3.10)
 
 project(
-        display
-        DESCRIPTION "simple pixel drawer"
+        fpsin
         LANGUAGES CXX
         )
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS False)
-
 set(library_compile_options -O2)
 
-add_library(display SHARED src/paint.cpp)
-target_include_directories(display PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_library(fpsin SHARED src/fpsin.cpp)
+target_include_directories(fpsin PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # target_compile_options(display
 #         INTERFACE
@@ -27,5 +25,4 @@ target_include_directories(display PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 # target_include_directories(display PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
 #                                 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-find_package(SFML COMPONENTS system window graphics REQUIRED)
-target_link_libraries(display INTERFACE sfml-graphics)
+# target_link_libraries(display INTERFACE sfml-graphics)

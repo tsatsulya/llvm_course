@@ -1,5 +1,5 @@
-#define SIM_X_SIZE 2000
-#define SIM_Y_SIZE 1000
+#define SIM_X_SIZE 400
+#define SIM_Y_SIZE 400
 
 void simFlush();
 void simPutDisplayPixel(int x, int y, int argb, int scale);
