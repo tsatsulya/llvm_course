@@ -9,6 +9,7 @@
 #include "llvm/IR/Function.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
+#include <llvm/IR/Instructions.h>
 #include "llvm/IR/Module.h"
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Support/raw_ostream.h"
@@ -57,6 +58,17 @@ int main() {
 
 
     BasicBlock *app_bb74 = BasicBlock::Create(context, "", app);
+    BasicBlock *app_bb82 = BasicBlock::Create(context, "", app);
+    BasicBlock *app_bb83 = BasicBlock::Create(context, "", app);
+    BasicBlock *app_bb84 = BasicBlock::Create(context, "", app);
+    BasicBlock *app_bb106 = BasicBlock::Create(context, "", app);
+    BasicBlock *app_bb109 = BasicBlock::Create(context, "", app);
+    BasicBlock *app_bb112 = BasicBlock::Create(context, "", app);
+    BasicBlock *app_bb115 = BasicBlock::Create(context, "", app);
+    BasicBlock *app_bb134 = BasicBlock::Create(context, "", app);
+    BasicBlock *app_bb137 = BasicBlock::Create(context, "", app);
+
+    BasicBlock *app_bb153 = BasicBlock::Create(context, "", app);
     BasicBlock *app_bb171 = BasicBlock::Create(context, "", app);
 
 
@@ -64,11 +76,11 @@ int main() {
     // #0
     builder.SetInsertPoint(app_bb0);
 
-    ArrayType *array = ArrayType::get(IntegerType::get(context, 8), 1000);
+    ArrayType *array_t = ArrayType::get(IntegerType::get(context, 8), 1000);
     //   %1 = alloca [1000 x i8], align 16
-    Value *val1 = builder.CreateAlloca(array);
+    Value *val1 = builder.CreateAlloca(array_t);
     //   %2 = alloca [1000 x i8], align 16
-    Value *val2 = builder.CreateAlloca(array);
+    Value *val2 = builder.CreateAlloca(array_t);
     // call void @llvm.lifetime.start.p0(i64 1000, ptr nonnull %2) #5
     builder.CreateCall(llvm_lifetime_start_func, {builder.getInt64(1000), val2});
     //   %3 = getelementptr inbounds [1000 x i8], ptr %2, i64 0, i64 14
@@ -130,9 +142,9 @@ int main() {
     //     i16 24, label %74
     //   ]
 
-    SwitchInst *switch_inst = builder.CreateSwitch(val11, app_bb14, 2);
-    switch_inst->addCase(builder.getInt16(0), app_bb74);
-    switch_inst->addCase(builder.getInt16(0), app_bb74);
+    SwitchInst *switch_inst8 = builder.CreateSwitch(val11, app_bb14, 2);
+    switch_inst8->addCase(builder.getInt16(0), app_bb74);
+    switch_inst8->addCase(builder.getInt16(24), app_bb74);
 
 
     // 14:
@@ -261,7 +273,150 @@ int main() {
     Value *val73 = builder.CreateAdd(val68, val72);
 
     //   br label %153
-    builder.CreateBr(app_bb8);
+    builder.CreateBr(app_bb153);
 
+    // 74:
+    builder.SetInsertPoint(app_bb74);
+    //   %75 = getelementptr inbounds i8, ptr %1, i64 %9
+    Value *val75 = builder.CreateInBoundsGEP(builder.getInt8Ty(), val1, val9);
+    //   %76 = load i8, ptr %75, align 1, !tbaa !3
+    Value *val76 = builder.CreateLoad(builder.getInt8Ty(), val75);
+    //   %77 = zext nneg i16 %12 to i32
+    Value *val77 = builder.CreateZExt(val12, builder.getInt32Ty());
+    //   %78 = add nsw i32 %13, -1
+    Value *val78 = builder.CreateAdd(val13, builder.getInt32(-1));
+    //   %79 = add nuw nsw i32 %13, 1
+    Value *val79 = builder.CreateAdd(val13, builder.getInt32(1));
+    //   %80 = add nsw i32 %77, -1
+    Value *val80 = builder.CreateAdd(val77, builder.getInt32(-1));
+    //   %81 = add nuw nsw i32 %77, 1
+    Value *val81 = builder.CreateAdd(val77, builder.getInt32(1));
+    //   switch i16 %11, label %84 [
+    //     i16 0, label %82
+    //     i16 24, label %83
+    //   ]
+    SwitchInst *switch_inst74 = builder.CreateSwitch(val11, app_bb84, 2);
+    switch_inst8->addCase(builder.getInt16(0), app_bb82);
+    switch_inst8->addCase(builder.getInt16(24), app_bb83);
+
+
+    // 82:
+    builder.SetInsertPoint(app_bb82);
+    //   br label %84
+    builder.CreateBr(app_bb153);
+
+    // 83:
+    builder.SetInsertPoint(app_bb83);
+    //   br label %84
+    builder.CreateBr(app_bb153);
+
+    // 84:
+    // %85 = phi i32 [ %78, %74 ], [ 23, %83 ], [ 0, %82 ]
+    PHINode *val85 = builder.CreatePHI(builder.getInt32Ty(), 3);
+    // %86 = phi i32 [ %79, %74 ], [ 24, %83 ], [ 1, %82 ]
+    PHINode *val86 = builder.CreatePHI(builder.getInt32Ty(), 3);
+    // %87 = icmp ult i64 %9, 25
+    Value *val87 = builder.CreateICmpULT(val9, builder.getInt64(25));
+    // %88 = trunc i64 %9 to i32
+    Value *val88 = builder.CreateTrunc(val9, builder.getInt32Ty());
+    // %89 = add i32 %88, -975
+    Value *val89 = builder.CreateAdd(val88, builder.getInt32(-975));
+    // %90 = icmp ult i32 %89, 25
+    Value *val90 = builder.CreateICmpULT(val89, builder.getInt32(25));
+    // %91 = select i1 %90, i32 39, i32 %81
+    Value *val91 = builder.CreateSelect(val90, builder.getInt32(39), val81);
+    // %92 = select i1 %87, i32 %81, i32 %91
+    Value *val92 = builder.CreateSelect(val87, val81, val91);
+    // %93 = sext i32 %80 to i64
+    Value *val93 = builder.CreateSExt(val80, builder.getInt64Ty());
+    // %94 = icmp sgt i32 %85, %86
+    Value *val94 = builder.CreateICmpSGT(val85, val86);
+    // %95 = sext i32 %85 to i64
+    Value *val95 = builder.CreateSExt(val85, builder.getInt64Ty());
+    // %96 = add nuw nsw i32 %86, 1
+    Value *val96 = builder.CreateAdd(val86, builder.getInt32(1));
+    // %97 = select i1 %87, i64 0, i64 %93
+    Value *val97 = builder.CreateSelect(val87, builder.getInt32(0), val93);
+    // %98 = add nuw nsw i32 %92, 1
+    Value *val98 = builder.CreateAdd(val92, builder.getInt32(1));
+    // %99 = sub nsw i32 %86, %85
+    Value *val99 = builder.CreateSub(val86, val85);
+    // %100 = zext i32 %99 to i64
+    Value *val100 = builder.CreateZExt(val99, builder.getInt64Ty());
+    // %101 = add nuw nsw i64 %100, 1
+    Value *val101 = builder.CreateAdd(val100, builder.getInt64(1));
+    // %102 = icmp ult i32 %99, 7
+    Value *val102 = builder.CreateICmpULT(val99, builder.getInt32(7));
+    // %103 = and i64 %101, 8589934584
+    Value *val103 = builder.CreateAnd(val101, builder.getInt64(8589934584));
+    // %104 = add nsw i64 %103, %95
+    Value *val104 = builder.CreateAdd(val103, val95);
+    // %105 = icmp eq i64 %101, %103
+    Value *val105 = builder.CreateAdd(val101, val103);
+    // br label %106
+    builder.CreateBr(app_bb106);
+
+
+
+    // 106:
+    builder.SetInsertPoint(app_bb106);
+    //   %107 = phi i64 [ %97, %84 ], [ %139, %137 ]
+    PHINode *val107 = builder.CreatePHI(builder.getInt32Ty(), 2);
+    //   %108 = phi i32 [ 0, %84 ], [ %138, %137 ]
+    PHINode *val108 = builder.CreatePHI(builder.getInt32Ty(), 2);
+    //   br i1 %94, label %137, label %109
+    builder.CreateCondBr(val94, app_bb137, app_bb109);
+
+
+    // 109:
+    builder.SetInsertPoint(app_bb109);
+    //   %110 = mul nsw i64 %107, 40
+    Value *val110 = builder.CreateMul(val107, builder.getInt64(40));
+    //   %111 = getelementptr i8, ptr %1, i64 %110
+    Value *val111 = builder.CreateGEP(builder.getInt8Ty(), val1, val110);
+    //   br i1 %102, label %134, label %112
+    builder.CreateCondBr(val102, app_bb134, app_bb112);
+
+    // 112:
+    builder.SetInsertPoint(app_bb112);
+    //   %113 = insertelement <4 x i32> <i32 poison, i32 0, i32 0, i32 0>, i32 %108, i64 0
+    Value* emptyVec = UndefValue::get(VectorType::get(Type::getInt32Ty( context ), 4, false));
+    Constant* index0 =  Constant::getIntegerValue(Type::getInt32Ty( context ), llvm::APInt(32, 0));
+    Value* val113 = builder.CreateInsertElement(builder.getInt32(0), emptyVec, index0, "");
+    // %114 = getelementptr i8, ptr %111, i64 %95
+    Value *val114 = builder.CreateGEP(builder.getInt8Ty(), val111, val95);
+    //   br label %115
+    builder.CreateCondBr(val102, app_bb134, app_bb115);
+
+
+
+    // 115:
+    builder.SetInsertPoint(app_bb115);
+
+    //   %116 = phi i64 [ 0, %112 ], [ %129, %115 ]
+    PHINode *val116 = builder.CreatePHI(builder.getInt64Ty(), 2);
+    //   %117 = phi <4 x i32> [ %113, %112 ], [ %127, %115 ]
+    PHINode *val117 = builder.CreatePHI(VectorType::get(Type::getInt32Ty( context ), 4, false), 2);
+    //   %118 = phi <4 x i32> [ zeroinitializer, %112 ], [ %128, %115 ]
+    PHINode *val118 = builder.CreatePHI(VectorType::get(Type::getInt32Ty( context ), 4, false), 2);
+    //   %119 = getelementptr i8, ptr %114, i64 %116
+    Value *val119 = builder.CreateGEP(builder.getInt8Ty(), val114, val116);
+    //   %120 = getelementptr i8, ptr %119, i64 4
+    Value *val120 = builder.CreateGEP(builder.getInt8Ty(), val119, builder.getInt64(4));
+    //   %121 = load <4 x i8>, ptr %119, align 1, !tbaa !3
+    Value *val121 = builder.CreateLoad(VectorType::get(Type::getInt32Ty( context ), 4, false), val119);
+    //   %122 = load <4 x i8>, ptr %120, align 1, !tbaa !3
+    Value *val122 = builder.CreateLoad(VectorType::get(Type::getInt32Ty( context ), 4, false), val120);
+    //   %123 = icmp ne <4 x i8> %121, zeroinitializer
+    
+    //   %124 = icmp ne <4 x i8> %122, zeroinitializer
+    //   %125 = zext <4 x i1> %123 to <4 x i32>
+    //   %126 = zext <4 x i1> %124 to <4 x i32>
+    //   %127 = add <4 x i32> %117, %125
+    //   %128 = add <4 x i32> %118, %126
+    //   %129 = add nuw i64 %116, 8
+    //   %130 = icmp eq i64 %129, %103
+    //   br i1 %130, label %131, label %115, !llvm.loop !6
     return 0;
 }
+
